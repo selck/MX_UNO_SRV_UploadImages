@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_ID" version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+	<display-name>MX_UNO_SRV_UploadImages</display-name>
+	<servlet>
+		<description>
+		</description>
+		<display-name>UploadImage</display-name>
+		<servlet-name>UploadImage</servlet-name>
+		<servlet-class>mx.com.amx.unotv.noticias.upload.images.servlet.UploadImage</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>UploadGaleria</display-name>
+		<servlet-name>UploadGaleria</servlet-name>
+		<servlet-class>mx.com.amx.unotv.noticias.upload.images.servlet.UploadGaleria</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>UploadInfografia</display-name>
+		<servlet-name>UploadInfografia</servlet-name>
+		<servlet-class>mx.com.amx.unotv.noticias.upload.images.servlet.UploadInfografia</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>UploadBanner</display-name>
+		<servlet-name>UploadBanner</servlet-name>
+		<servlet-class>mx.com.amx.unotv.noticias.upload.images.servlet.UploadBanner</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>CreateJSONBanners</display-name>
+		<servlet-name>CreateJSONBanners</servlet-name>
+		<servlet-class>mx.com.amx.unotv.noticias.upload.images.servlet.CreateJSONBanners</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>UploadImage</servlet-name>
+		<url-pattern>/UploadImage</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>UploadGaleria</servlet-name>
+		<url-pattern>/UploadGaleria</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>UploadInfografia</servlet-name>
+		<url-pattern>/UploadInfografia</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>UploadBanner</servlet-name>
+		<url-pattern>/UploadBanner</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>CreateJSONBanners</servlet-name>
+		<url-pattern>/CreateJSONBanners</url-pattern>
+	</servlet-mapping>
+	
+	<context-param>
+		  <param-name>contextConfigLocation</param-name>
+		  <param-value>classpath*:applicationContext.xml</param-value>
+	</context-param>
+	 	  
+	<listener>
+	  <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	 
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+	
+</web-app>
