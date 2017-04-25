@@ -32,6 +32,9 @@ import org.apache.log4j.Logger;
 
 public class UploadImage extends HttpServlet {
 	
+	private final int BASE_ORIGINAL=640;
+	private final int ALTO_ORIGINAL=450;
+	
 	private static final long serialVersionUID = 1L;
        	
 	private final Logger logger = Logger.getLogger(UploadImage.class);
@@ -104,6 +107,7 @@ public class UploadImage extends HttpServlet {
 	                if(uu>0) {
 	                	if(sizeFile<=maxBites) {
 	                		String directorio = parametrosDTO.getPathLocalImagenes();
+	                		String directorioClaroIdeas=parametrosDTO.getPathLocalImagenesClaroIdeas();
 	                		boolean continuar = false;
 	                		Integer secuencia = 0;
 	                		try { 
@@ -112,6 +116,7 @@ public class UploadImage extends HttpServlet {
 								secuencia = procesoBo.getSecuencia("");
 								//directorio += secuencia  + "/";
 								continuar = createFolders(directorio);
+								createFolders(directorioClaroIdeas);
 	                		} catch (Exception e) {
 	                			continuar = false;
 	                			secuencia = 0;
@@ -171,12 +176,29 @@ public class UploadImage extends HttpServlet {
 								} catch (Exception e) {
 									logger.error("Error al reajustar imagen miniatura: ", e);
 								}
-											                	
-		                		fileName = secuencia + "-Principal." + extFile;
+								
+								try {
+									
+									float porcentajeParaRedimensionar1=0.555f;
+									float porcentajeParaRedimensionar2=0.3125f;
+									
+									BufferedImage principal = Scalr.resize(bImageFromConvert, Scalr.Method.SPEED, Scalr.Mode.FIT_EXACT, 640, 450, Scalr.OP_ANTIALIAS);
+									BufferedImage image1=generaImagenVertical(principal, BASE_ORIGINAL, ALTO_ORIGINAL, porcentajeParaRedimensionar1);
+									BufferedImage image2=generaImagenHorizontal(principal, BASE_ORIGINAL, ALTO_ORIGINAL, porcentajeParaRedimensionar2);
+									
+									saveImage(image1, directorioClaroIdeas + secuencia + "-imagent1."+extFile);
+									saveImage(image2, directorioClaroIdeas + secuencia + "-imagent2."+extFile);
+									
+								} catch (Exception e) {
+									logger.error("Error ");
+								}
+		                		
+								fileName = secuencia + "-Principal." + extFile;
 		                		
 		                		if(parametrosDTO.getPathShell()!= null && parametrosDTO.getPathShell().length()>0) {
 		                			if(parametrosDTO.getPathRemoteImagenes() != null && parametrosDTO.getPathRemoteImagenes().length()>0 && parametrosDTO.getAmbiente().equalsIgnoreCase("desarrollo")) {
-		                				transfiereWebServer(directorio, parametrosDTO);
+		                				transfiereWebServer(directorio, parametrosDTO.getPathRemoteImagenes(), parametrosDTO);
+		                				transfiereWebServer(directorioClaroIdeas, parametrosDTO.getPathRemoteImagenesClaroIdeas(), parametrosDTO);
 		                			}
 		                		}
 	                		} else {
@@ -203,48 +225,93 @@ public class UploadImage extends HttpServlet {
         }
     }	
 	
-	/*private boolean obtenerPropiedades() {
-		boolean success = false;		 
-		try {	    		
-			Properties propsTmp = new Properties();
-		    propsTmp.load(this.getClass().getResourceAsStream( "/ApplicationResources.properties" ));
-			String rutaProperties = propsTmp.getProperty("rutaProperties");			
-			Properties props = new Properties();
-			props.load(new FileInputStream(new File(rutaProperties)));		
-			pathLocal = props.getProperty("pathLocal");
-			pathRemotoNBA = props.getProperty("pathRemotoNBA");
-			pathShell = props.getProperty("pathShell");
-			pathShellElimina = props.getProperty("pathShellElimina");
-			extFiles = props.getProperty("extFiles") == null? null: props.getProperty("extFiles").split(",");
-			URL_WS_BASE = props.getProperty("URL_WS_BASE");
-			try {
-				parametrosDTO.getMaxMegas() = Integer.parseInt(props.getProperty("parametrosDTO.getMaxMegas()Programas"));
-			} catch (Exception e) {
-				parametrosDTO.getMaxMegas() = 1;
-			}
-			success = true;					
-		} catch (Exception ex) {
-			success = false;
-			logger.error("No se encontro el Archivo de propiedades: ", ex);			
+	private void saveImage(BufferedImage image, String directorio) throws Exception{
+		try {
+			ByteArrayOutputStream baosT = new ByteArrayOutputStream();
+			ImageIO.write( image, "jpg", baosT );
+			baosT.flush();
+			byte[] imageTInByte = baosT.toByteArray();
+			baosT.close();
+			FileOutputStream fosT = new FileOutputStream(directorio);
+			fosT.write(imageTInByte);
+			fosT.close();
+			logger.debug("Image "+directorio+" was saved ok.");
+		} catch (Exception e) {
+			logger.error("Error saveImage: "+e.getMessage());
+			e.printStackTrace();
+			throw new Exception(e.getMessage());
 		}
-		return success;
-    }*/
+	}
+	
+	private BufferedImage generaImagenHorizontal(BufferedImage bImageFromConvert, int base, int alto, float porcentajeRedimensionar) throws Exception{
+		
+		final int ALTO_IMAGEN_TRANSFORMADA=120;
+		
+		int baseRedimension=0;
+		int altoRedimension=0;
+		
+		BufferedImage imagenRecortada=null;
+		try {
+			
+			baseRedimension=(int) Math.ceil(base * porcentajeRedimensionar);
+			altoRedimension=(int) Math.ceil(alto * porcentajeRedimensionar) - 1 ;
+			
+			int recorteVertical=(altoRedimension - ALTO_IMAGEN_TRANSFORMADA)/2;
+			
+			BufferedImage imageRedimensionada = Scalr.resize(bImageFromConvert, Scalr.Method.SPEED, Scalr.Mode.FIT_EXACT, baseRedimension, altoRedimension, Scalr.OP_ANTIALIAS);
+			
+			imagenRecortada=Scalr.crop(imageRedimensionada, 0, recorteVertical, baseRedimension, altoRedimension-(recorteVertical*2), null);
+			
+		} catch (Exception e) {
+			logger.error("Error generaImagenHorizontal: "+e.getMessage());
+			e.printStackTrace();
+			throw new Exception(e);
+		}
+		return imagenRecortada;
+	}
+
+	private BufferedImage generaImagenVertical(BufferedImage bImageFromConvert, int base, int alto, float porcentajeRedimensionar) throws Exception{
+		
+		final int BASE_IMAGEN_TRANSFORMADA=200;
+		
+		int baseRedimension=0;
+		int altoRedimension=0;
+		
+		BufferedImage imagenRecortada=null;
+		try {
+			
+			baseRedimension=(int) Math.ceil(base * porcentajeRedimensionar);
+			altoRedimension=(int) Math.ceil(alto * porcentajeRedimensionar);
+			
+			int recorteDeLado=(baseRedimension - BASE_IMAGEN_TRANSFORMADA)/2;
+			
+			BufferedImage imageRedimensionada = Scalr.resize(bImageFromConvert, Scalr.Method.SPEED, Scalr.Mode.FIT_EXACT, baseRedimension, altoRedimension, Scalr.OP_ANTIALIAS);
+			
+			imagenRecortada=Scalr.crop(imageRedimensionada, recorteDeLado, 0, baseRedimension-(recorteDeLado*2), altoRedimension, null);
+			
+		} catch (Exception e) {
+			logger.error("Error generaImagenVertical: "+e.getMessage());
+			e.printStackTrace();
+			throw new Exception(e);
+		}
+		return imagenRecortada;
+	}
 	
 	/**
 	 * 
 	 * */
-	public boolean transfiereWebServer(String local, ParametrosDTO parametrosDTO) {
+	public boolean transfiereWebServer(String local,String destino, ParametrosDTO parametrosDTO) {
 		logger.debug("Inicia transfiereWebServer");
 		boolean success = false;
-		String comando = parametrosDTO.getPathShell() + " " + local + "* " + parametrosDTO.getPathRemoteImagenes();
+		String comando = parametrosDTO.getPathShell() + " " + local + "* " + destino;
 		String comandoElimina = parametrosDTO.getPathShellElimina() + " " + local;
 		
 		logger.debug("comando: " + comando);
-		logger.debug("comandoElimina: " + comandoElimina);
+		//logger.debug("comandoElimina: " + comandoElimina);
 		try {								
 			Runtime r = Runtime.getRuntime();
 			r.exec(comando).waitFor();
-			r.exec(comandoElimina).waitFor();			
+			//r.exec(comandoElimina).waitFor();			
 			success = true;
 			
 		} catch(Exception e) {

@@ -26,10 +26,12 @@ public class CargaProperties {
 			parametros.setPathLocalImagenes(props.getProperty("pathLocalImagenes"));
 			parametros.setPathLocalImagenesGaleria(props.getProperty("pathLocalImagenesGaleria"));
 			parametros.setPathLocalImagenesInfografia(props.getProperty("pathLocalImagenesInfografia"));
+			parametros.setPathLocalImagenesClaroIdeas(props.getProperty("pathLocalImagenesClaroIdeas"));
 			
 			parametros.setPathRemoteImagenes(props.getProperty("pathRemoteImagenes"));
 			parametros.setPathRemoteGallery(props.getProperty("pathRemoteGallery"));
 			parametros.setPathRemoteInfografia(props.getProperty("pathRemoteInfografia"));
+			parametros.setPathRemoteImagenesClaroIdeas(props.getProperty("pathRemoteImagenesClaroIdeas"));
 			
 			parametros.setPathShell(props.getProperty("pathShell"));
 			parametros.setPathShellElimina(props.getProperty("pathShellElimina"));

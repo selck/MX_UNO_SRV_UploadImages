@@ -6,6 +6,8 @@ public class ParametrosDTO implements Serializable {
 	
 	private static final long serialVersionUID = 1L;	
 	
+	private String pathLocalImagenesClaroIdeas;
+	private String pathRemoteImagenesClaroIdeas;
 	private String pathLocalImagenes;
 	private String pathRemoteImagenes;
 	private String pathLocalBanners;
@@ -25,7 +27,30 @@ public class ParametrosDTO implements Serializable {
 	private String URL_WS_BASE;	
 	private String [] extFiles;
 	private String ambiente;
-	
+	/**
+	 * @return the pathLocalImagenesClaroIdeas
+	 */
+	public String getPathLocalImagenesClaroIdeas() {
+		return pathLocalImagenesClaroIdeas;
+	}
+	/**
+	 * @param pathLocalImagenesClaroIdeas the pathLocalImagenesClaroIdeas to set
+	 */
+	public void setPathLocalImagenesClaroIdeas(String pathLocalImagenesClaroIdeas) {
+		this.pathLocalImagenesClaroIdeas = pathLocalImagenesClaroIdeas;
+	}
+	/**
+	 * @return the pathRemoteImagenesClaroIdeas
+	 */
+	public String getPathRemoteImagenesClaroIdeas() {
+		return pathRemoteImagenesClaroIdeas;
+	}
+	/**
+	 * @param pathRemoteImagenesClaroIdeas the pathRemoteImagenesClaroIdeas to set
+	 */
+	public void setPathRemoteImagenesClaroIdeas(String pathRemoteImagenesClaroIdeas) {
+		this.pathRemoteImagenesClaroIdeas = pathRemoteImagenesClaroIdeas;
+	}
 	/**
 	 * @return the pathLocalImagenes
 	 */
@@ -73,6 +98,30 @@ public class ParametrosDTO implements Serializable {
 	 */
 	public void setPathRemoteBanners(String pathRemoteBanners) {
 		this.pathRemoteBanners = pathRemoteBanners;
+	}
+	/**
+	 * @return the pathLocalBannersJSON
+	 */
+	public String getPathLocalBannersJSON() {
+		return pathLocalBannersJSON;
+	}
+	/**
+	 * @param pathLocalBannersJSON the pathLocalBannersJSON to set
+	 */
+	public void setPathLocalBannersJSON(String pathLocalBannersJSON) {
+		this.pathLocalBannersJSON = pathLocalBannersJSON;
+	}
+	/**
+	 * @return the nameBannersJSON
+	 */
+	public String getNameBannersJSON() {
+		return nameBannersJSON;
+	}
+	/**
+	 * @param nameBannersJSON the nameBannersJSON to set
+	 */
+	public void setNameBannersJSON(String nameBannersJSON) {
+		this.nameBannersJSON = nameBannersJSON;
 	}
 	/**
 	 * @return the pathLocalImagenesGaleria
@@ -230,31 +279,8 @@ public class ParametrosDTO implements Serializable {
 	public void setAmbiente(String ambiente) {
 		this.ambiente = ambiente;
 	}
-	/**
-	 * @return the pathLocalBannersJSON
-	 */
-	public String getPathLocalBannersJSON() {
-		return pathLocalBannersJSON;
-	}
-	/**
-	 * @param pathLocalBannersJSON the pathLocalBannersJSON to set
-	 */
-	public void setPathLocalBannersJSON(String pathLocalBannersJSON) {
-		this.pathLocalBannersJSON = pathLocalBannersJSON;
-	}
-	/**
-	 * @return the nameBannersJSON
-	 */
-	public String getNameBannersJSON() {
-		return nameBannersJSON;
-	}
-	/**
-	 * @param nameBannersJSON the nameBannersJSON to set
-	 */
-	public void setNameBannersJSON(String nameBannersJSON) {
-		this.nameBannersJSON = nameBannersJSON;
-	}
 	
+		
 		
 	
 }
