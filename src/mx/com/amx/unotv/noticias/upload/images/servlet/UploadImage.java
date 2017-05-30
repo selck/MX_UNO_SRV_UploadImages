@@ -235,7 +235,7 @@ public class UploadImage extends HttpServlet {
 			FileOutputStream fosT = new FileOutputStream(directorio);
 			fosT.write(imageTInByte);
 			fosT.close();
-			logger.debug("Image "+directorio+" was saved ok.");
+			logger.debug("--->Image "+directorio+" was saved ok.");
 		} catch (Exception e) {
 			logger.error("Error saveImage: "+e.getMessage());
 			e.printStackTrace();
