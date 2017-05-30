@@ -147,7 +147,7 @@ public class UploadImage extends HttpServlet {
 									fos.write(imageInByte);
 									fos.close();
 								} catch (Exception e) {
-									logger.error("Error al reajustar imagen principal: ", e);
+									logger.error("Error en imagen principal: ", e);
 								}
 								
 								try {
